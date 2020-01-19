@@ -1,31 +1,22 @@
-import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { Grid, LineChart, XAxis, YAxis } from 'react-native-svg-charts'
+import React, { Component } from 'react';
+import { View, StyleSheet, Text, Picker } from 'react-native';
 
-const favorableScenario = [ 0, 12, 20, 30, 40, 60, 90, 140, 200, 240, 260 ]
-const moderateScenario = [ 0, 10, 13, 18, 25, 40, 60, 78, 100, 120, 160 ]
-const unfavorableScenario = [ 0, 8, 10, 15, 20, 30, 40, 55, 60, 70, 85 ]
+import Chart from '../components/Chart'
 
-const axesSvg = { fontSize: 10, fill: 'grey' };
-const verticalContentInset = { top: 10, bottom: 10 }
-const xAxisHeight = 30
+const serie = {
+  favorableScenario : [ 0, 12, 20, 30, 40, 60, 90, 140, 200, 240, 260 ],
+  moderateScenario : [ 0, 10, 13, 18, 25, 40, 60, 78, 100, 120, 160 ],
+  unfavorableScenario : [ 0, 8, 10, 15, 20, 30, 40, 55, 60, 70, 85 ]
+};
 
-const data = [
-    {
-        data: favorableScenario,
-        svg: { stroke: 'green' },
-    },
-    {
-        data: moderateScenario,
-        svg: { stroke: '#8800cc' },
-    },
-    {
-      data: unfavorableScenario,
-      svg: { stroke: 'red' },
-  },
-]
-
-export default function ChartScreen() {
+export default class ChartScreen extends Component {
+  constructor () {
+    super()
+    this.state = {
+      multiplyFactor: 1
+    }
+  }
+  render(){
   return (
     <View>
       <View style={styles.tabBarInfoContainer}>
@@ -36,38 +27,22 @@ export default function ChartScreen() {
         <View
           style={[styles.codeHighlightContainer, styles.navigationFilename]}>
           <Text style={styles.codeHighlightText}>
-            Chart configuration is avaliable soon...
+            Select your risk profile
           </Text>
-
+       
+          <Picker
+            selectedValue={this.state.multiplyFactor}
+            onValueChange={(itemValue, itemIndex) =>
+              this.setState({multiplyFactor: itemValue})
+            }>
+            <Picker.Item label="Moderate" value="1" />
+            <Picker.Item label="Agresive" value="2" />
+          </Picker>
         </View>
       </View>
-      <View style={{ height: 300, padding: 10, flexDirection: 'row' }}>
-          <YAxis
-              data={favorableScenario}
-              style={{ marginBottom: xAxisHeight }}
-              contentInset={verticalContentInset}
-              svg={axesSvg}
-          />
-          <View style={{ flex: 1, marginLeft: 10 }}>
-              <LineChart
-                  style={{ flex: 1 }}
-                  data={data}
-                  contentInset={verticalContentInset}
-                  svg={{ stroke: 'rgb(134, 65, 244)' }}
-              >
-                  <Grid/>
-              </LineChart>
-              <XAxis
-                  style={{ marginHorizontal: -10, height: xAxisHeight }}
-                  data={favorableScenario}
-                  formatLabel={(value, index) => index}
-                  contentInset={{ left: 10, right: 10 }}
-                  svg={axesSvg}
-              />
-          </View>
-      </View>
+     <Chart serie={serie} multiplyFactor={this.state.multiplyFactor}/>
     </View>
-)
+)}
 }
 
 ChartScreen.navigationOptions = {
