@@ -9,8 +9,6 @@ const xAxisHeight = 30
 
 let data = [];
 
-
-
 function getSerie(props) {
  const favorableScenario = props.serie.favorableScenario.map( item => item * props.multiplyFactor)
  const moderateScenario = props.serie.moderateScenario.map( item => item )
@@ -42,6 +40,8 @@ export default function Chart(props) {
     <View style={{ height: 300, padding: 10, flexDirection: 'row' }}>
     <YAxis
         data={serie[0].data}
+        formatLabel={(value) => `${value}€`}
+
         style={{ marginBottom: xAxisHeight }}
         contentInset={verticalContentInset}
         svg={axesSvg}
@@ -58,7 +58,7 @@ export default function Chart(props) {
         <XAxis
             style={{ marginHorizontal: -10, height: xAxisHeight }}
             data={serie[0].data}
-            formatLabel={(value, index) => index}
+            formatLabel={(value, index) => `${2020 + index}`}
             contentInset={{ left: 10, right: 10 }}
             svg={axesSvg}
             
